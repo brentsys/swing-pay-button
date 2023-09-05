@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Custom Element!</title>
+  <script src="bower_components/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+  <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+</head>
+
+  <body>
+    <my-title></my-title>
+    <swing-pay-button></swing-pay-button>
+  </body>
+  <script>
+    window.addEventListener('WebComponentsReady', function () {
+      var myTitleScript = document.createElement('script');
+      myTitleScript.src = 'dist/my-title.js';
+      document.head.appendChild(myTitleScript);
+      var payButtonScript = document.createElement('script');
+      payButtonScript.src = 'dist/pay-button.js';
+      document.head.appendChild(payButtonScript);
+    });
+  </script>
+
+</html>
