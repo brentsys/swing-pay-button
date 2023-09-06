@@ -1,10 +1,19 @@
+function requestPayment(event: any) {
+  const {amountString, accountId} = this
+  const amount = +amountString
+  if (isNaN(amount)) {
+    console.error("invalid amout value:", amountString)
+    return
+  }
+  console.log({amount, accountId})
+}
+
 (function () {
   const logoUrl = "https://storage.googleapis.com/kash_subdocs/sps/images/logo.png";
   const template = document.createElement('template');
-  const html2 = `
-  <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  const innerHTML = `
   <!-- sample html for this button-->
-  <div class="button">
+  <div class="button" id="swing-pay-button">
     Pay with Swing
     <div></div>
     <i><img src="${logoUrl}" alt="buttonpng" border="0" /> </i>
@@ -58,15 +67,41 @@
     }
   </style>
   `;
-  template.innerHTML = html2;
+  template.innerHTML = innerHTML;
+  template.id = "pay-button"
 
-  class PayButton extends HTMLElement {
+  class HTMLPayButton extends HTMLElement {
+    accountId?: string
+    amountString?: string
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
+      this.attachShadow({mode: 'open'});
       this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
+
+    getButton() {
+      return this.shadowRoot.querySelector('#swing-pay-button')
+    }
+
+    getAccountId() {
+      const button = this.getButton()
+      return button.getAttribute("account-id")
+    }
+
+    connectedCallback() {
+      this.accountId = this.getAttribute('data-account')
+      this.amountString = this.getAttribute('data-amount')
+      const button = this.getButton()
+      button.addEventListener('click', requestPayment.bind(this))
+    }
+
+    disconnectedCallback() {
+      console.info("===> disconnected callback")
+      const button = this.getButton()
+      button.removeEventListener('click', requestPayment.bind(this))
+    }
+
   }
 
-  window.customElements.define('swing-pay-button', PayButton);
+  window.customElements.define('swing-pay-button', HTMLPayButton);
 })();

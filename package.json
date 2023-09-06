@@ -2,16 +2,26 @@
   "name": "swing-pay-button",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src --out-dir dist"
+    "clean": "rimraf dist/",
+    "build": "tsc -p .",
+    "compile": "pnpm clean && pnpm build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@babel/preset-env": "^7.22.15",
-    "babel-cli": "^6.26.0"
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
+    "eslint": "^8.33.0",
+    "eslint-import-resolver-typescript": "^3.5.3",
+    "eslint-plugin-import": "^2.27.5",
+    "rimraf": "^4.3.1",
+    "typescript": "^4.9.5",
+    "typescript-map": "^0.1.0"
+  },
+  "dependencies": {
+    "@babel/core": "^7.20.12"
   }
 }
