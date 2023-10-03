@@ -11,3 +11,10 @@ use the js file below to use then componenet
 ````
 
 Use checkout.thml file as an example
+
+### Parameters
+
+|Name| description|
+|--- |---|
+|data-account|the swing account number of the company|
+|data-amount|amount to be paid|
