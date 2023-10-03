@@ -1,3 +1,7 @@
+import {checkoutPageUrl, kashRequestServerEndpoint} from "./constants"
+import {CreateRequestResponse, GraphQLResponse, PayRequest} from "./types"
+import {GraphQLClient, gql} from 'graphql-request'
+
 function requestPayment(event: any) {
   const {amountString, accountId} = this
   const amount = +amountString
@@ -5,8 +9,38 @@ function requestPayment(event: any) {
     console.error("invalid amout value:", amountString)
     return
   }
-  console.log({amount, accountId})
+  const transactionId = "xx112222"
+  const pr: PayRequest = {amount, accountId, transactionId}
+  generateKashRequest(pr)
+    .then(id => {
+      //console.log({id})
+      location.href = checkoutPageUrl + `?id=${id}`
+    })
+    .catch(error => {
+      alert(error)
+    })
 }
+
+const mutation = gql`
+  mutation MaskeKashRequest($params: RequestInput!) {
+    createRequest(params: $params) {
+      code
+      success
+      message
+      id
+    }
+}
+`
+
+
+async function generateKashRequest(pr: PayRequest): Promise<string> {
+  const graphQLClient = new GraphQLClient(kashRequestServerEndpoint)
+  const result = await graphQLClient.request(mutation, {params: pr}) as CreateRequestResponse
+  const response = result.createRequest
+  if (!response.success) throw new Error(response.message)
+  return response.id
+}
+
 
 (function () {
   const logoUrl = "https://storage.googleapis.com/kash_subdocs/sps/images/logo.png";
@@ -78,7 +112,6 @@ function requestPayment(event: any) {
       this.attachShadow({mode: 'open'});
       this.shadowRoot.appendChild(template.content.cloneNode(true));
     }
-
     getButton() {
       return this.shadowRoot.querySelector('#swing-pay-button')
     }

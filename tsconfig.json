@@ -6,19 +6,24 @@
     "outDir": "dist",
     "target": "es2020",
     "module": "esnext",
+    "moduleResolution": "node",
+    "allowJs": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "sourceMap": true,
     "paths": {
     }
   },
   "include": [
     "src",
     "src/**/*", "./src/**/*.ts",
-    "declaration.d.ts"
-, "tsconfig.json"   ],
+    "declaration.d.ts",
+    "tsconfig.json"
+   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "bower_components"
   ],
 }
